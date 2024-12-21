@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <Folder Include="Common\Behaviours\" />
+      <Folder Include="Notifications\Queries\GetById\" />
       <Folder Include="Users\Commands\Delete\" />
       <Folder Include="Users\Commands\Update\" />
       <Folder Include="Common\Exceptions\" />

@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Common;
 
 namespace Domain.Entities;
-
+[Table("tblNotification")]
 public class Notification:BaseAuditableEntity
 {
     [Key]
