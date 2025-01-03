@@ -1,8 +1,10 @@
 using Application;
 using Domain;
 using Domain.Interfaces;
+using Domain.Services;
 using Infrastructure;
 using Persistence;
+using WebApi.Hubs;
 
 namespace WebApi.Extentions;
 
@@ -12,14 +14,16 @@ public static class ServiceExtentions
         options =>
         {
             options.AddPolicy("CorsPolicy", builder =>
-                builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader());
+                builder.AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials()
+              .SetIsOriginAllowed(origin => true));
         });
     // public static void ConfigurePersistenceDI(this IServiceCollection services, IConfiguration configuration)=>AddPersistenceDI(configuration);
     public static IServiceCollection AddDependencyInjection(this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddTransient<INotificationService,SignalRNotificationService>();
         services.AddApplicationDI(configuration);
         services.AddInfrastructureDI(configuration);
         services.AddPersistenceDI(configuration);
