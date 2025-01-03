@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using WebApi.Middleware;
 using Persistence.Data;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<RegisterUserRequestDtoValid
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerDocumentation();
+builder.Services.AddSignalR();
 builder.Services.AddDependencyInjection(builder.Configuration);
 var key = Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value);
 builder.Services.AddAuthentication(x =>
@@ -54,8 +56,9 @@ builder.Services.AddAuthentication(x =>
 });
 builder.Services.AddAuthorization();
 
-var app = builder.Build();
 
+var app = builder.Build();
+app.UseCors("CorsPolicy");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -91,11 +94,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseExceptionHandler();
-app.UseRouting();
 app.UseHttpsRedirection();
-app.MapControllers();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseWebSockets(); // Before MapHub for WebSockets
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<NotificationHub>("/notificationHub");
+    endpoints.MapControllers();
+});
 
 app.Run();
 

@@ -1,4 +1,5 @@
 using Domain.Interfaces;
+using Infrastructure.Messaging;
 using Infrastructure.Services;
 using Infrastructure.Services.Implementation;
 using Infrastructure.Services.Interface;
@@ -13,6 +14,10 @@ public static class DependencyInjection
     {
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<INotificationManager, NotificationManager>();
+        services.AddSingleton<RabitmqConnectionFactory>();
+        services.AddScoped<IMessagePublisher, RabbitMqNotificationService>();
+
         services.AddStackExchangeRedisCache(options =>
         {
             string connection = configuration.GetConnectionString("Redis")!;
