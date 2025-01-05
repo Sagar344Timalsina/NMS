@@ -24,7 +24,7 @@ namespace Application.Notifications.Commands.Create
                 notification.IsRead = request.Notification.IsRead;
                 notification.UserId = request.Notification.UserId;
 
-                var response = await notificationManager.ProcessNotificationAsync(notification);
+                var response = await notificationManager.ProcessPublishNotificationAsync(notification);
                 //var response = await repositories.AddAsync(notification);
                 return new Response() { Succeeded = response, Messages = response == true ? "Successfully Added" : "Couldnot add Notification" };
             }

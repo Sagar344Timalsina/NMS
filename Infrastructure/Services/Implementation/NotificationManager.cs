@@ -26,7 +26,7 @@ namespace Infrastructure.Services.Implementation
 
         }
 
-        public async Task<bool> ProcessNotificationAsync(Notification notification)
+        public async Task<bool> ProcessPublishNotificationAsync(Notification notification)
         {
             try
             {
@@ -58,6 +58,37 @@ namespace Infrastructure.Services.Implementation
             }
             catch (Exception ex)
             {
+                throw new Exception(ex.Message);
+            }
+        }
+
+       public async Task<bool> ProcessConsumeNotificationAsync(Notification notification)
+        {
+            try
+            {
+                if (notification.Type.ToLower() == "email")
+                {
+                    await _signalRService.SendNotificationAsync(notification);
+                    notification.IsSent = true;
+                }
+                else if (notification.Type.ToLower() == "app")
+                {
+                    await _signalRService.SendNotificationAsync(notification);
+                    notification.IsSent = true;
+                }
+                else if (notification.Type.ToLower() == "sms")
+                {
+                    await _signalRService.SendNotificationAsync(notification);
+                    notification.IsSent = true;
+                }
+
+                var response = await repositories.updateAsync(notification);
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+
                 throw new Exception(ex.Message);
             }
         }

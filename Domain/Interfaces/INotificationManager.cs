@@ -4,6 +4,7 @@ namespace Infrastructure.Services.Interface
 {
     public interface INotificationManager
     {
-        Task<bool> ProcessNotificationAsync(Notification notification);
+        Task<bool> ProcessPublishNotificationAsync(Notification notification);
+        Task<bool> ProcessConsumeNotificationAsync(Notification notification);
     }
 }

@@ -17,6 +17,7 @@ public static class DependencyInjection
         services.AddScoped<INotificationManager, NotificationManager>();
         services.AddSingleton<RabitmqConnectionFactory>();
         services.AddScoped<IMessagePublisher, RabbitMqNotificationService>();
+        services.AddScoped<IMessageConsumer, RabbitMqConsumer>();
 
         services.AddStackExchangeRedisCache(options =>
         {

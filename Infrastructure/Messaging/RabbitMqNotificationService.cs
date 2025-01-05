@@ -15,7 +15,7 @@ namespace Infrastructure.Messaging
         }
         public async Task publishAsync<T>(string queueName, T message)
         {
-            using var channel = _connectionFactory.Connection.CreateModel();
+            using var channel = _connectionFactory.CreateChannel();
             channel.QueueDeclare(queue: queueName, // Ensure this matches the routing key
             durable: false,
             exclusive: false,

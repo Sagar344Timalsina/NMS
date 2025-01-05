@@ -33,6 +33,7 @@ namespace Infrastructure.Messaging
                 throw;
             }
         }
+        public IModel CreateChannel() => _connection.CreateModel();
         public void Dispose()
         {
             _connection.Dispose();

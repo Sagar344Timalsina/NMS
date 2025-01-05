@@ -4,6 +4,8 @@ using Domain.Interfaces;
 using Domain.Services;
 using Infrastructure;
 using Persistence;
+using System.Runtime.CompilerServices;
+using WebApi.HostedServices;
 using WebApi.Hubs;
 
 namespace WebApi.Extentions;
@@ -27,7 +29,25 @@ public static class ServiceExtentions
         services.AddApplicationDI(configuration);
         services.AddInfrastructureDI(configuration);
         services.AddPersistenceDI(configuration);
+        services.AddHostedService(serviceProvider => new RabbitMqConsumerHostedServices(
+        serviceProvider.GetRequiredService<IServiceScopeFactory>(),
+        "emailQueue"));
+
+        services.AddHostedService(serviceProvider => new RabbitMqConsumerHostedServices(
+        serviceProvider.GetRequiredService<IServiceScopeFactory>(),
+        "appQueue"));
+
+        services.AddHostedService(serviceProvider => new RabbitMqConsumerHostedServices(
+        serviceProvider.GetRequiredService<IServiceScopeFactory>(),
+        "smsQueue"));
         return services;    
+    }
+    public static IServiceCollection AddBackgroundService(this IServiceCollection services)
+    {
+        
+
+
+        return services;
     }
     public static IServiceCollection AddService(this IServiceCollection services)
     {
